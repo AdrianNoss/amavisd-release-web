@@ -16,3 +16,10 @@ A small and simple Webinterface for the amavisd-release command
 ## How to use:
 
 If the Mailuser get the amavis notification, he can click on the release link and can release the mail from quarantine afte a captcha verification.
+
+## Screenshots
+
+![Mail from amavis](https://github.com/AdrianNoss/amavisd-release-web/blob/master/pics/mail.png?raw=true "Virus Alert with Link")
+![Release Index](https://github.com/AdrianNoss/amavisd-release-web/blob/master/pics/main.png?raw=true "Release Webinterface")
+![Captcha](https://github.com/AdrianNoss/amavisd-release-web/blob/master/pics/captcha.png?raw=true "reCaptcha")
+![release OK](https://github.com/AdrianNoss/amavisd-release-web/blob/master/pics/release_ok.png?raw=true "Release successfull")
