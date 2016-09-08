@@ -1,0 +1,85 @@
+#
+# =============================================================================
+# This is a template for VIRUS/BANNED/BAD-HEADER RECIPIENTS NOTIFICATIONS.
+# For syntax and customization instructions see README.customize.
+# Long header fields will be automatically wrapped by the program.
+#
+From: %f
+Date: %d
+Subject: [? [:ccat|major] |Clean mail|Clean mail|MTA-blocked mail|\
+OVERSIZED mail|INVALID HEADER in mail|Spammy|Spam|UNCHECKED contents in mail|\
+VERBOTENE DATEIENDUNG (%F) |VIRUS (%V)] in einer Mail an Sie von %s
+[? [:header_field|To] |To: undisclosed-recipients:;|To: [:header_field|To]]
+[? [:header_field|Cc] |#|Cc: [:header_field|Cc]]
+Message-ID: <VR%i@%h>
+
+------- english version below -------
+
+[? %#V |[? %#F ||ALARM: VERBOTENE DATEIENDUNG]|VIRUS ALARM]
+
+Unser Content-Filter fand
+[? %#V |#|[:wrap|78|    |  |[?%#V|die Viren|den Virus|die Viren]: %V]]
+[? %#F |#|[:wrap|78|    |  |verbotene [?%#F|Dateien|Datei|Dateien]: %F]]
+[? %#X |#|[[:wrap|78|    |  |%X]\n]]
+
+in einer Mail an Sie [? %#V |von:|von:]
+  %o
+[? %j |#|[:wrap|78||  |Betreff: %j]]
+
+
+Content Typ: [:ccat|name|main]#
+[? [:ccat|is_blocked_by_nonmain] ||, blocked for [:ccat|name]]
+
+
+[? %q |Die Nachricht wurde verworfen.|Die Nachricht wurde isoliert unter der Referenz ID:
+
+   %q]
+
+[? %q | |Sollte es sich um einen Fehlalarm handeln und Sie sind sich sicher, dass diese Mail harmlos ist, klicken sie auf diesen Link: 
+
+https://antispam.bond.de/index.php?ID=%q
+
+Dort koennen Sie die Mail aus der Quarantaene freigeben] 
+
+
+Bei Fragen wenden Sie sich bitte an Ihren System-Administrator.
+
+
+
+------------------------------------
+
+
+
+[? %#V |[? %#F ||BANNED CONTENTS ALERT]|VIRUS ALERT]
+
+Our content checker found
+[? %#V |#|[:wrap|78|    |  |[?%#V|viruses|virus|viruses]: %V]]
+[? %#F |#|[:wrap|78|    |  |banned [?%#F|names|name|names]: %F]]
+[? %#X |#|[[:wrap|78|    |  |%X]\n]]
+
+in an email to you [? %#V |from:|from probably faked sender:]
+  %o
+[? %#V |#|claiming to be: %s]
+
+Content type: [:ccat|name|main]#
+[? [:ccat|is_blocked_by_nonmain] ||, blocked for [:ccat|name]]
+Our internal reference code for your message is %n/%i
+
+[? %a |#|[:wrap|78||  |First upstream SMTP client IP address: \[%a\] %g]]
+[? %e |#|[:wrap|78||  |According to a 'Received:' trace,\
+ the message apparently originated at: \[%e\], %t]]
+
+[:wrap|78||  |Return-Path: %s[?[:dkim|envsender]|| (OK)]]
+[:wrap|78||  |From: [:header_field|From][?[:dkim|author]|| (dkim:AUTHOR)]]
+[? [:header_field|Sender]|#|\
+[:wrap|78||  |Sender: [:header_field|Sender]\
+[?[:dkim|sender]|| (dkim:SENDER)]]]
+[? %m |#|[:wrap|78||  |Message-ID: %m]]
+[? %r |#|[:wrap|78||  |Resent-Message-ID: %r]]
+[? [:useragent] |#|[:wrap|78||  |[:useragent]]]
+[? %j |#|[:wrap|78||  |Subject: %j]]
+[? %q |Not quarantined.|The message has been quarantined as: %q]
+
+[? %q | |You can release the Mail by yourself with this Link: http://antispam.bond.de/index.php?ID=%q]
+
+Please contact your system administrator for details.
