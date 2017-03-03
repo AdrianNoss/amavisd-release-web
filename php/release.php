@@ -10,7 +10,7 @@ $responseKeys = json_decode($response,true);
 if(intval($responseKeys["success"]) !== 1) {
     die();
 }
-$ID = $_POST['mailid'];
+$ID = escapeshellarg($_POST['mailid']);
 exec("sudo amavisd-release $ID  2>&1", $out, $retcode );
 $msg = $out[0];
 $code = substr($msg, 0, 3);
