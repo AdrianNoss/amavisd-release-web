@@ -15,7 +15,7 @@ A small and simple Webinterface for the amavisd-release command
 
 ## How to use:
 
-If the Mailuser get the amavis notification, he can click on the release link and can release the mail from quarantine afte a captcha verification.
+If the Mailuser get the amavis notification, he can click on the release link and can release the mail from quarantine after a captcha verification.
 
 ## Screenshots
 
