@@ -1,3 +1,7 @@
+<?php
+	include('include/config.php');
+	include('include/lang_' . $language . '.php');
+?>
 <!DOCTYPE html>
 <html lang="<?php echo $language?>">
 <head>
