@@ -1,4 +1,7 @@
 <?php
+	include('include/config.php');
+	include('include/lang_' . $language . '.php');
+
 	if(!isset($_GET["ID"]))
 	{
 		header("Location: php/error.php");
