@@ -1,6 +1,5 @@
 <?php
-	include('include/config.php');
-	include('include/lang_' . $language . '.php');
+	include('start.php');	
 
 	if(!isset($_GET["ID"]))
 	{
