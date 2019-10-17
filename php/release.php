@@ -1,5 +1,7 @@
 <?php
 
+include('include/start.php');
+
 if(isset($_POST['isHuman'])) {
 	$captcha = $_POST['isHuman'];
 } else {
