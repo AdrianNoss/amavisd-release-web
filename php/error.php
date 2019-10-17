@@ -1,6 +1,5 @@
 <?php
-	include('include/config.php');
-	include('include/lang_' . $language . '.php');
+	include('include/start.php');
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $language?>">
