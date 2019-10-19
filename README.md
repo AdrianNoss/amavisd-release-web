@@ -8,7 +8,8 @@ A small and simple Webinterface for the amavisd-release command
 
   www-data      ALL=NOPASSWD:   /usr/sbin/amavisd-release
 
-- create a google recaptcha api key etc @ https://www.google.com/recaptcha and add the key to the index.php and php/release.php
+- copy file include/config.php.exampleto include/config.php and edit to suit your needs
+- create a google recaptcha api key etc @ https://www.google.com/recaptcha and add the keys in include/config.php
 - copy the amavisd-new templates from amavis-templ to your amavisd-new template folder
 - customize the templates and the php files for your needs (title, links etc)
 - have fun!

@@ -1,5 +1,5 @@
 <?php
-	include('start.php');	
+	include('include/start.php');	
 
 	if(!isset($_GET["ID"]))
 	{
@@ -22,7 +22,7 @@
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="<?php echo $company_url ?>"><?php echo $site_title;?> - <?php lang('Antispam Mail Release') ?></a>
+				<a class="navbar-brand" href="<?php echo $company_url; ?>"><?php echo $site_title; ?> - <?php lang('Antispam Mail Release'); ?></a>
 			</div>
 		</div>
 	</div>
@@ -33,8 +33,8 @@
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-label="<?php lang('Close)?>"><span aria-hidden="true">&times;</span></button>
-								<h4 class="modal-title" id="myModalLabel"><?php lang('Release result')?></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="<?php lang('Close'); ?>"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title" id="myModalLabel"><?php lang('Release result'); ?></h4>
 							</div>
 							<div class="modal-body">
 								<div id="message"></div>
@@ -59,7 +59,7 @@
 					<b><?php lang('Release alert')?></b>
 				</div>
 				<form role="form" id="frmRelease">
-					<div class="g-recaptcha" data-sitekey="<?php echo $recaptcha_api_key ?>" data-callback="enableBtn"></div>
+					<div class="g-recaptcha" data-sitekey="<?php echo $recaptchca_api_key ?>" data-callback="enableBtn"></div>
 					<p></p>
 					<div class="form-group text-left">
 						<button type="submit" id="submitBtn" class="btn btn-danger btn-lg"><?php lang('Release Mail')?></button>

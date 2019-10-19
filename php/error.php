@@ -1,5 +1,5 @@
 <?php
-	include('include/start.php');
+	include('../include/start.php');
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $language?>">
@@ -24,7 +24,7 @@
 		<div class="starter-template">
 			<div class="col-md-8 col-md-offset-2">
 				<div class="alert alert-danger" role="alert">
-					<b><?php lang('No ID provided');?></b>
+					<b><?php lang('No ID Provided');?></b>
 				</div>
 			</div>
 		</div>
