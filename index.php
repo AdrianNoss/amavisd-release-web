@@ -1,4 +1,6 @@
 <?php
+	include('include/start.php');	
+
 	if(!isset($_GET["ID"]))
 	{
 		header("Location: php/error.php");
@@ -6,12 +8,12 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="<?php echo $language ?>">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>'bond' Mail Release</title>
+	<title><?php echo $site_title;?> - <?php lang('Mail Release')?></title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/starter-template.css" rel="stylesheet">
 	<script src='https://www.google.com/recaptcha/api.js'></script>
@@ -20,7 +22,7 @@
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="http://www.bond.de">'bond' Antispam Mail Release</a>
+				<a class="navbar-brand" href="<?php echo $company_url; ?>"><?php echo $site_title; ?> - <?php lang('Antispam Mail Release'); ?></a>
 			</div>
 		</div>
 	</div>
@@ -31,37 +33,36 @@
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<h4 class="modal-title" id="myModalLabel">Release Ergebnis</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="<?php lang('Close'); ?>"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title" id="myModalLabel"><?php lang('Release result'); ?></h4>
 							</div>
 							<div class="modal-body">
 								<div id="message"></div>
-								<p>Sie können das Browserfenster nun schließen.</p>
+								<p><?php lang('Now you can close the browser window');?></p>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal"><?php lang('Close')?></button>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="panel-danger">
 					<div class="panel-heading">
-						<h3 class="panel-title"><b>Achtung!</b></h3>
+						<h3 class="panel-title"><b><?php lang('Warning')?>!</b></h3>
 					</div>
 					<div class="panel-body">
-						<p>Sie  möchten die Mail mit der Referenz ID <b><?php echo $_GET["ID"]; ?></b> aus der Quarantäne freigeben.</p>
-						<p>Geben Sie die Mail nur frei, wenn Sie sich absolut sicher sind, dass es sich um eine <b>vertrauenswürdige</b> Mail handelt!<p>
+						<p><?php lang('Sure to release message',$_GET["ID"]); ?></p>
+						<p><?php lang('Release recommendation')?><p>
 					</div>
 				</div>
 				<div class="alert alert-danger" role="alert">
-					<b>Sie handel auf eigene Verantwortung!<br> 
-					Falls die Mail wirklich einen Virus enthält, kann es zu Systemschäden und Datenverlust kommen.</b>
+					<b><?php lang('Release alert')?></b>
 				</div>
 				<form role="form" id="frmRelease">
-					<div class="g-recaptcha" data-sitekey="SECRET_KEY_FROM_GOOGLE" data-callback="enableBtn"></div>
+					<div class="g-recaptcha" data-sitekey="<?php echo $recaptchca_api_key ?>" data-callback="enableBtn"></div>
 					<p></p>
 					<div class="form-group text-left">
-						<button type="submit" id="submitBtn" class="btn btn-danger btn-lg">Release Mail</button>
+						<button type="submit" id="submitBtn" class="btn btn-danger btn-lg"><?php lang('Release Mail')?></button>
 					</div>
 				</form>
 			</div>
@@ -100,10 +101,10 @@
 							$( '#message' ).addClass( 'alert' );
 					if (code == "250") {
 								$( '#message' ).addClass( 'alert-success' );
-						data = "<b>Release erfolgreich!</b> Bitte überprüfen Sie ihre Mailbox.<br> <br>" + data;
+						data = "<?php lang('Release Succeeded')?><br> <br>" + data;
 					} else {
 						$( '#message' ).addClass( 'alert-danger' );
-						data = "<b>Fehler!</b> Release konnte nicht durchgeführt werden. Wenden Sie sich an Ihren Administrator.<br> <br>" + data;
+						data = "<?php lang('Release Failed')?><br> <br>" + data;
 					}
 							$( '#message').html( data );
 					$( '#submitBtn' ).prop('disabled', true);
