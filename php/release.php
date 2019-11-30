@@ -16,7 +16,15 @@ $ID = escapeshellarg($_POST['mailid']);
 exec("sudo amavisd-release $ID  2>&1", $out, $retcode );
 $msg = $out[0];
 $code = substr($msg, 0, 3);
-$retstring = $code."|".$msg;
+if($code !== "250") {
+  if($code == "450") {
+    $retstring = $code."|ID not found";
+  } else {
+    $retstring = $code."|unexpected error occured, contact administrator";
+  };
+} else {
+  $retstring = $code."|ID released";
+};
 
 echo $retstring;
 ?>
