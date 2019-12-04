@@ -12,6 +12,7 @@ $lang['Release Mail'] =	'Release Mail';
 $lang['Release Succeeded'] = "<b>Release erfolgreich!</b> Bitte überprüfen Sie ihre Mailbox.";
 $lang['Release Failed']	= "<b>Fehler!</b> Release konnte nicht durchgeführt werden. Wenden Sie sich an Ihren Administrator.<br> <br>"; 
 $lang['Mail Release'] = "Release Mail";
+$lang['Antispam Mail Release'] = "Antispam Mail Release";
 
 $lang['No ID Provided'] = 'Es wurde keine Referenznummer angegeben. Bei Problemen melden Sie sich bitte bei Ihrem Administrator';
 
