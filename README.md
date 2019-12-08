@@ -4,9 +4,15 @@ A small and simple Webinterface for the amavisd-release command
 ## How to install:
 
 - copy everything to your http folder on your mailserver
-- add the apache2 user (www-data for example) to the sudoer file and allow "sudo amavisd-release ID" without password:
+- add the apache user to the sudoer file and allow "sudo amavisd-release ID" without password:
 
-  `www-data      ALL=NOPASSWD:   /usr/sbin/amavisd-release`
+  - example #1
+
+  `www-data     ALL=NOPASSWD:/usr/sbin/amavisd-release`
+
+  - example #2 (different user and path)
+
+  `apache 	ALL=NOPASSWD:/bin/amavisd-release`
 
 - copy file include/config.php.exampleto include/config.php and edit to suit your needs
 - create a google recaptcha api key etc @ https://www.google.com/recaptcha and add the keys in include/config.php
