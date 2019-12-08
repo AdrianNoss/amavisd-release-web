@@ -117,7 +117,7 @@ if (defined $opts{'r'}) {
 };
 
 # open syslog
-openlog($progname, "pid", "user") unless (defined $opts{'t'});
+openlog($progname, "pid", "mail") unless (defined $opts{'t'});
 
 # read recipients
 if (defined $RECIPFILE && -f $RECIPFILE) {
