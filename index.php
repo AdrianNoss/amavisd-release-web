@@ -46,7 +46,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="panel-danger">
+				<div class="panel-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?>">
 					<div class="panel-heading">
 						<h3 class="panel-title"><b><?php lang('Warning')?>!</b></h3>
 					</div>
@@ -55,14 +55,14 @@
 						<p><?php lang('Release recommendation')?><p>
 					</div>
 				</div>
-				<div class="alert alert-danger" role="alert">
-					<b><?php lang('Release alert')?></b>
+				<div class="alert alert-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?>" role="alert">
+					<b><?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) lang('Release warning'); else if (preg_match("/^(archive|clean)/", $_GET["ID"])) lang('Release info'); else lang('Release alert')?></b>
 				</div>
 				<form role="form" id="frmRelease">
 					<div class="g-recaptcha" data-sitekey="<?php echo $recaptchca_api_key ?>" data-callback="enableBtn"></div>
 					<p></p>
 					<div class="form-group text-left">
-						<button type="submit" id="submitBtn" class="btn btn-danger btn-lg"><?php lang('Release Mail')?></button>
+						<button type="submit" id="submitBtn" class="btn btn-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?> btn-lg"><?php lang('Release Mail')?></button>
 					</div>
 				</form>
 			</div>
