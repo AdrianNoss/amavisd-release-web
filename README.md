@@ -13,8 +13,11 @@ A small and simple Webinterface for the amavisd-release command
 - copy the amavisd-new templates from amavis-templ to your amavisd-new template or config folder
 - customize the templates and the php files for your needs (title, links etc)
 - activate the templates in /etc/amavisd/amavisd.conf (example)
+
   `$notify_virus_admin_templ = read_text("/etc/amavisd/template-virus-admin.txt");`
+
   `$notify_virus_recips_templ = read_text("/etc/amavisd/template-virus-recipient.txt");`
+
 - have fun!
 
 ## How to use:
