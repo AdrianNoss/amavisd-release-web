@@ -15,7 +15,9 @@ A small and simple Webinterface for the amavisd-release command
   `apache 	ALL=NOPASSWD:/bin/amavisd-release`
 
 - copy file include/config.php.exampleto include/config.php and edit to suit your needs
-- create a google recaptcha api key etc @ https://www.google.com/recaptcha and add the keys in include/config.php
+- select Captcha service (Google reCaptcha or hCapture) and add the keys in include/config.php
+  - Google: create a reCaptcha api and secret key @ https://www.google.com/recaptcha
+  - hCapture: create site and secret key @ https://dashboard.hcaptcha.com/
 - copy the amavisd-new templates from amavis-templ to your amavisd-new template or config folder
 - customize the templates and the php files for your needs (title, links etc)
 - activate the templates in /etc/amavisd/amavisd.conf (example)
