@@ -16,7 +16,7 @@
 	<title><?php echo $site_title;?> - <?php lang('Mail Release')?></title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/starter-template.css" rel="stylesheet">
-	<script src='https://www.google.com/recaptcha/api.js'></script>
+	<script src='https://www.google.com/recaptcha/api.js' async defer></script>
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
