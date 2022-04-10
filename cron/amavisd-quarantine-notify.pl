@@ -1,6 +1,6 @@
 #!/bin/perl -W
 #
-# (P) & (C) 2019 by Peter Bieringer <pb@bieringer.de>
+# (P) & (C) 2019-2020 by Peter Bieringer <pb@bieringer.de>
 #
 # This program supports "amavisd-release-web" by sending on regular basis (cron)
 # notification e-mails to recipients, when entries in quarantine were found
@@ -21,6 +21,10 @@
 #
 # 20191201/PB: initial
 # 20191208/PB: implement option handling and blacklist/whitelist filter option, add syslog
+# 20191210/PB: extend info about type of quarantined e-mails, add warning in case of virus
+# 20200129/PB: add X-Spam-Level: ***** (5)
+# 20201113/PB: replace X-Spam-Level: ******* (7)
+# 20201117/PB: display original X-Spam-Level in message
 
 use strict;
 use warnings;
@@ -146,6 +150,8 @@ while (readdir $dh) {
 
 	next if $entry !~ /^(spam|virus|badh|banned|archive|unchecked|clean)-/o; # skip not expected files
 
+	my $type = $1;
+
 	my $file = $QUARANTINE . "/" . $entry;
 	next if (! -f $file);
 
@@ -165,12 +171,14 @@ while (readdir $dh) {
 
 	while (<$fh>) {
 		last if $_ eq ""; # header/content separator
-		if ($_ =~ /^(To|From|Date|Subject|X-Spam-Score|X-Envelope-To|X-Envelope-From): (.+)/o) {
+		if ($_ =~ /^(To|From|Date|Subject|X-Spam-Score|X-Spam-Level|X-Envelope-To|X-Envelope-From): (.+)/o) {
 			my $key = $1;
 			my $value = $2;
-			if ($key =~ /^(X-Envelope-To|X-Envelope-From)$/) {
+			if ($key =~ /^(X-Envelope-To|X-Envelope-From)$/o) {
 				$value =~ s/^<//og;
 				$value =~ s/>$//og;
+			} elsif ($key eq "X-Spam-Score" && $type eq "virus") {
+				$value .= "  ***** VIRUS FOUND *****";
 			};
 			$quarantine{$entry}->{$key} = decode("MIME-Header", $value);
 			$quarantine{$entry}->{$key} =~ s/[^\x00-\x7f]//og;
@@ -234,7 +242,7 @@ foreach my $recipient (sort keys %recipients) {
 	my @output;
 	my %spam_list;
 
-	my @keys = ("X-Envelope-From", "X-Envelope-To", "From" , "To", "Date", "Subject", "X-Spam-Score");
+	my @keys = ("X-Envelope-From", "X-Envelope-To", "From" , "To", "Date", "Subject", "X-Spam-Score", "X-Spam-Level");
 
 	foreach my $entry (sort { $quarantine{$b}->{'mtime'} <=> $quarantine{$a}->{'mtime'} } keys %quarantine) {
 		# print Dumper($quarantine{$entry});
@@ -270,7 +278,7 @@ foreach my $recipient (sort keys %recipients) {
 		};
 	};
 
-	my $count = scalar(keys %spam_list);
+	my %statistics;
 
 	foreach my $digest (keys %spam_list) {
 		warn($digest) if defined $opts{'d'};
@@ -286,6 +294,8 @@ foreach my $recipient (sort keys %recipients) {
 			# only print last entry
 			push @output, strftime "Received     : %Y-%m-%d %H:%M:%S %Z", localtime($mtime);
 			push @output, sprintf "%-13s: %s", "Release-URL", $URL_BASE . $spam_list{$digest}->{'entry'}->{$mtime};
+			$spam_list{$digest}->{'entry'}->{$mtime} =~ /^([^-]+)-.*$/o;
+			$statistics{$1}++;
 			last;
 		};
 		push @output, "\n";
@@ -300,7 +310,12 @@ foreach my $recipient (sort keys %recipients) {
 	push @topic, "=" x 75;
 	push @topic, "E-Mail Quarantine Information " . $timestamp;
 	push @topic, " Following spams were rejected but still in quarantine";
-	push @topic, " Range: last " . $HOURS . " hours, found spam/virues: " . $count;
+	my $info = "";
+	for my $stat (keys %statistics) {
+		$info .= " " if (length($info) > 0);
+		$info .= $stat . "=" . $statistics{$stat};
+	};
+	push @topic, " Range: last " . $HOURS . " hours, found: " . $info;
 	push @topic, " Recipient: " . $recipient;
 	push @topic, "-" x 75;
 	
@@ -317,12 +332,13 @@ foreach my $recipient (sort keys %recipients) {
 			To      => $recipient,
 			Subject => 'E-Mail Quarantine Information ' . $timestamp,
 			'X-Priority' => '5',
+			'X-Spam-Level' => '*******',
 			Data	=> join("\n", @topic) . "\n\n" . join("\n", @output)
 		);
 
 		$message->send;
 
-		syslog("info", "send quarantine information to $recipient (entries: $count)") unless (defined $opts{'t'});
+		syslog("info", "send quarantine information to $recipient ($info)") unless (defined $opts{'t'});
 	};
 };
 
