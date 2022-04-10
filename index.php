@@ -59,7 +59,7 @@
 					<b><?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) lang('Release warning'); else if (preg_match("/^(archive|clean)/", $_GET["ID"])) lang('Release info'); else lang('Release alert')?></b>
 				</div>
 				<form role="form" id="frmRelease">
-					<div class="g-recaptcha" data-sitekey="<?php echo $recaptchca_api_key ?>" data-callback="enableBtn"></div>
+					<div class="g-recaptcha" data-sitekey="<?php echo $recaptcha_api_key ?>" data-callback="enableBtn"></div>
 					<p></p>
 					<div class="form-group text-left">
 						<button type="submit" id="submitBtn" class="btn btn-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?> btn-lg"><?php lang('Release Mail')?></button>

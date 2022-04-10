@@ -7,7 +7,7 @@ if(isset($_POST['isHuman'])) {
 } else {
 	die();
 }
-$response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptchca_secret_key . "&response=" . $captcha . "&remoteip=".$_SERVER['REMOTE_ADDR']);
+$response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptcha_secret_key . "&response=" . $captcha . "&remoteip=".$_SERVER['REMOTE_ADDR']);
 $responseKeys = json_decode($response,true);
 if(intval($responseKeys["success"]) !== 1) {
     die();

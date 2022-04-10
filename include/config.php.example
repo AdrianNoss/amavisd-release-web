@@ -3,11 +3,11 @@
 		Configuration File
 	*/
 	
-	// Recapthca API Key. Obtain yours on https://recaptchca.google.com
-	$recaptchca_api_key = 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ';
+	// Recaptcha API Key. Obtain yours on https://www.google.com/recaptcha/
+	$recaptcha_api_key = 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ';
 
-	// Recapthca Secret Key
-	$recaptchca_secret_key = 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ';
+	// Recaptcha Secret Key
+	$recaptcha_secret_key = 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ';
 	
 	// Your default Language
 	$language = 'it_IT';
