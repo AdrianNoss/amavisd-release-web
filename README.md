@@ -3,7 +3,7 @@ A small and simple Webinterface for the amavisd-release command
 
 ## How to install:
 
-- copy everything to your http folder on your mailserver
+- copy everything to your apache's html folder on your mailserver
 - add the apache user to the sudoer file and allow "sudo amavisd-release ID" without password:
 
   - example #1
