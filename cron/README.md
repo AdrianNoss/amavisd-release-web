@@ -17,9 +17,10 @@ A small and simple cron job related to amavisd-release-web
   !user@dont-care-about-rejected-spams.domain.example
   # blacklisted domain
   !@dont-care-about-rejected-spams.domain.example
-```
+  ```
 
   see also latest online-help:
+
   `/usr/local/sbin/amavisd-quarantine-notify.pl -h`
 
 ## How to test:
