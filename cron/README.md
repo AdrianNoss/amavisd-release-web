@@ -7,6 +7,13 @@ A small and simple cron job related to amavisd-release-web
 
   `/usr/local/sbin/amavisd-quarantine-notify.pl`
 
+- adjust group and permissions (group may be different per OS variant)
+
+  ```
+  chmod ug+rx /usr/local/sbin/amavisd-quarantine-notify.pl
+  chgrp amavis /usr/local/sbin/amavisd-quarantine-notify.pl
+  ```
+
 - create whitelist file: /etc/amavisd/amavisd-release-web-recipients
   ```
   # whitelisted user
@@ -31,6 +38,6 @@ A small and simple cron job related to amavisd-release-web
 
 ## How to regular use:
 
-- create cron job running every 4 hours in e.g. file /etc/cron.d/amavis
+- create cron job running every 4 hours in e.g. file /etc/cron.d/amavis (group may be different per OS variant)
 
   `59 */4 * * * amavis /usr/local/sbin/amavisd-quarantine-notify.pl`
