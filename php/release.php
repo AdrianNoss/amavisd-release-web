@@ -7,7 +7,15 @@ if(isset($_POST['isHuman'])) {
 } else {
 	die();
 }
-$response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptcha_secret_key . "&response=" . $captcha . "&remoteip=".$_SERVER['REMOTE_ADDR']);
+switch ($captcha_service) {
+  case 'hCaptcha':
+    $response = file_get_contents("https://hcaptcha.com/siteverify?secret=" . $hcaptcha_secret_key . "&sitekey=" . $friendlycaptcha_site_key . "&response=".$captcha . "&remoteip=".$_SERVER['REMOTE_ADDR']);
+    break;
+
+  default:
+    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptcha_secret_key . "&response=" . $captcha . "&remoteip=".$_SERVER['REMOTE_ADDR']);
+    break;
+}
 $responseKeys = json_decode($response,true);
 if(intval($responseKeys["success"]) !== 1) {
     die();

@@ -16,7 +16,21 @@
 	<title><?php echo $site_title;?> - <?php lang('Mail Release')?></title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/starter-template.css" rel="stylesheet">
+<?php
+	switch ($captcha_service) {
+	  case 'hCaptcha':
+?>
+	<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+<?php
+		break;
+
+	  default:
+?>
 	<script src='https://www.google.com/recaptcha/api.js' async defer></script>
+<?php
+		break;
+	};
+?>
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -59,7 +73,21 @@
 					<b><?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) lang('Release warning'); else if (preg_match("/^(archive|clean)/", $_GET["ID"])) lang('Release info'); else lang('Release alert')?></b>
 				</div>
 				<form role="form" id="frmRelease">
+<?php
+	switch ($captcha_service) {
+	  case 'hCaptcha':
+?>
+					<div class="h-captcha" data-sitekey="<?php echo $hcaptcha_site_key ?>" data-callback="enableBtn"></div>
+<?php
+		break;
+
+	  default:
+?>
 					<div class="g-recaptcha" data-sitekey="<?php echo $recaptcha_api_key ?>" data-callback="enableBtn"></div>
+<?php
+		break;
+	};
+?>
 					<p></p>
 					<div class="form-group text-left">
 						<button type="submit" id="submitBtn" class="btn btn-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?> btn-lg"><?php lang('Release Mail')?></button>
@@ -80,7 +108,21 @@
 		$( '#frmRelease').submit( function() {
 			var formControl = true;
 			var mailid = "<?php Print($_GET["ID"]); ?>";
+<?php
+	switch ($captcha_service) {
+	  case 'hCaptcha':
+?>
+			var isHuman = hcaptcha.getResponse();
+<?php
+		break;
+
+	  default:
+?>
 			var isHuman = grecaptcha.getResponse();
+<?php
+		break;
+	};
+?>
 
 			if(isHuman.length == 0) {
 				formControl = false;
