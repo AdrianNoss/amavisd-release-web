@@ -13,6 +13,7 @@ $lang['Release Mail'] =	'Mail freigeben';
 $lang['Release Succeeded'] = '<b>Freigabe erfolgreich!</b> Bitte überprüfen Sie ihre Mailbox.';
 $lang['Release Failed']	= '<b>Fehler!</b> Freigabe konnte nicht durchgeführt werden. Wenden Sie sich an Ihren Administrator.';
 $lang['Mail Release'] = 'Mail Freigabe';
+$lang['Mail released'] = 'Mail freigegeben';
 $lang['Antispam Mail Release'] = 'Antispam Mail Freigabe';
 
 $lang['No ID Provided'] = 'Es wurde keine Referenznummer angegeben. Bei Problemen melden Sie sich bitte bei Ihrem Administrator.';

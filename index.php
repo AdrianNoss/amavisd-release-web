@@ -47,11 +47,11 @@
 	<div class="container">
 		<div class="starter-template">
 			<div class="col-md-8 col-md-offset-2">
-				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-label="<?php lang('Close'); ?>"><span aria-hidden="true">&times;</span></button>
+								<button type="button" class="close" data-dismiss="modal" aria-label="<?php lang('Close'); ?>" id="myModalHeaderClose"><span aria-hidden="true">&times;</span></button>
 								<h4 class="modal-title" id="myModalLabel"><?php lang('Release result'); ?></h4>
 							</div>
 							<div class="modal-body">
@@ -60,12 +60,12 @@
 								<p><?php lang('Now you can close the browser window');?></p>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal"><?php lang('Close')?></button>
+								<button type="button" class="btn btn-default" data-dismiss="modal" id="myModalFooterClose"><?php lang('Close')?></button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="panel-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?>">
+				<div class="panel-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?>" id="panel">
 					<div class="panel-heading">
 						<h3 class="panel-title"><b><?php lang('Warning')?>!</b></h3>
 					</div>
@@ -74,21 +74,21 @@
 						<p><?php lang('Release recommendation')?><p>
 					</div>
 				</div>
-				<div class="alert alert-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?>" role="alert">
+				<div class="alert alert-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?>" role="alert" id="alert">
 					<b><?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) lang('Release warning'); else if (preg_match("/^(archive|clean)/", $_GET["ID"])) lang('Release info'); else lang('Release alert')?></b>
 				</div>
-				<form role="form" id="frmRelease">
+				<form role="form" id="frmRelease" action="javascript:frmRelease()">
 <?php
 	switch ($captcha_service) {
 	  case 'hCaptcha':
 ?>
-					<div class="h-captcha" data-sitekey="<?php echo $hcaptcha_site_key ?>" data-callback="enableBtn"></div>
+					<div class="h-captcha" data-sitekey="<?php echo $hcaptcha_site_key ?>" data-callback="enableBtn" id="captcha"></div>
 <?php
 		break;
 
 	  default:
 ?>
-					<div class="g-recaptcha" data-sitekey="<?php echo $recaptcha_api_key ?>" data-callback="enableBtn"></div>
+					<div class="g-recaptcha" data-sitekey="<?php echo $recaptcha_api_key ?>" data-callback="enableBtn" id="captcha"></div>
 <?php
 		break;
 	};
@@ -101,16 +101,24 @@
 			</div>
 		</div>
 	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
 	<script>
 		document.getElementById("submitBtn").disabled = true;
+
+		document.getElementById("myModalHeaderClose").onclick = function() {
+			document.getElementById("myModal").style.display = 'none';
+			document.getElementById("myModal").style.opacity = 0;
+		};
+
+		document.getElementById("myModalFooterClose").onclick = function() {
+			document.getElementById("myModal").style.display = 'none';
+			document.getElementById("myModal").style.opacity = 0;
+		};
 
 		function enableBtn(){
 			document.getElementById("submitBtn").disabled = false;
 		}
 
-		$( '#frmRelease').submit( function() {
+		function frmRelease(){
 			var formControl = true;
 			var mailid = "<?php Print($_GET["ID"]); ?>";
 <?php
@@ -134,31 +142,60 @@
 			}
 
 			if(formControl) {
-				$.ajax({
-					type: "POST",
-					url: "php/release.php",
-					data: {
-							mailid:mailid,
-							isHuman:isHuman
-					}
-				}).done(function(msg) {
-					var code = msg.split('|')[0];
-					var data = msg.substr(msg.indexOf("|") + 1);
-					$( '#myModal' ).modal('show');
-							$( '#message' ).addClass( 'alert' );
+				document.getElementById("message").className = 'alert';
+				var data = "PROBLEM"; // default
+				var code;
+
+				var data = new FormData();
+				data.append("mailid", mailid);
+				data.append("isHuman", isHuman);
+
+				fetch("php/release.php", {
+					method: 'POST',
+					body: data
+				})
+				.then(response => {
+					if (!response.ok) {
+						data = 'HTTP error ' + response.status;
+						throw new Error();
+					};
+					return response.text();
+				})
+				.then(text => {
+					if (text.length == 0) {
+						data = 'HTTP result empty';
+						throw new Error();
+					};
+					code = text.split('|')[0];
+					data = text.substr(text.indexOf("|") + 1);
 					if (code == "250") {
-								$( '#message' ).addClass( 'alert-success' );
+						document.getElementById("message").className = 'alert-success';
 						data = "<?php lang('Release Succeeded')?><br> <br>" + data;
+						success = 1;
 					} else {
-						$( '#message' ).addClass( 'alert-danger' );
+						document.getElementById("message").className = 'alert-danger';
 						data = "<?php lang('Release Failed')?><br> <br>" + data;
-					}
-							$( '#message').html( data );
-					$( '#submitBtn' ).prop('disabled', true);
-					});
-			}
-			return false;
-		} );
+					};
+					data = data + ' (' + code + ')';
+					throw new Error();
+				})
+				.catch(error => {
+					document.getElementById("message").innerHTML = data;
+					document.getElementById("submitBtn").disabled = true;
+					document.getElementById("myModal").style.display = 'block';
+					document.getElementById("myModal").style.opacity = 1;
+
+					if (code == "250") {
+						document.getElementById("submitBtn").textContent = "<?php lang('Mail released')?>";
+						document.getElementById("submitBtn").className = "alert alert-dismissable";
+						document.getElementById("submitBtn").style.opacity = 0.5;
+						document.getElementById("panel").style.opacity = 0.5;
+						document.getElementById("alert").style.opacity = 0.5;
+						document.getElementById("captcha").style.opacity = 0;
+					};
+				});
+			};
+		};
 	</script>
 </body>
 </html>

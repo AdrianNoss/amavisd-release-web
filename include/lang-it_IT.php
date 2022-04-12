@@ -11,6 +11,7 @@ $lang['Release Mail'] =	'Rilascia Messaggio';
 $lang['Release Succeeded'] = "<b>Rilascio riuscito!</b> controlla la tua casella di posta";
 $lang['Release Failed']	= "<b>Errore!</b> Impossibile eseguire il rilascio. Contatta il tuo amministratore di sistema."; 
 $lang['Mail Release'] = "Rilascio Messaggio";
+$lang['Mail released'] = 'Messaggio Rilasciata';
 
 $lang['No ID Provided'] = 'Nessun numero di riferimento &egrave; stato specificato. In caso di problemi, contatta il tuo Amministratore di Sistema.';
 $lang['Invalid ID Provided'] = 'Numero non valido &egrave; stato specificato. In caso di problemi, contatta il tuo Amministratore di Sistema.';
