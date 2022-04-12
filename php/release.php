@@ -47,12 +47,12 @@ $msg = $out[0];
 $code = substr($msg, 0, 3);
 if($code !== "250") {
   if($code == "450") {
-    $retstring = $code."|ID not found";
+    $retstring = $code."|ID not found: " . $ID;
   } else {
     $retstring = $code."|unexpected error occured, contact administrator";
   };
 } else {
-  $retstring = $code."|ID released";
+  $retstring = $code."|ID released: " . $ID;
 };
 
 echo $retstring;
