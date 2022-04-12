@@ -15,6 +15,6 @@ $lang['Release Failed']	= '<b>Fehler!</b> Freigabe konnte nicht durchgeführt we
 $lang['Mail Release'] = 'Mail Freigabe';
 $lang['Antispam Mail Release'] = 'Antispam Mail Freigabe';
 
-$lang['No ID Provided'] = 'Es wurde keine Referenznummer angegeben. Bei Problemen melden Sie sich bitte bei Ihrem Administrator';
+$lang['No ID Provided'] = 'Es wurde keine Referenznummer angegeben. Bei Problemen melden Sie sich bitte bei Ihrem Administrator.';
 
 ?>
