@@ -10,7 +10,6 @@
     <title><?php echo $site_title;?> - <?php lang('Mail Release')?></title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/starter-template.css" rel="stylesheet">
-    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -29,7 +28,5 @@
 			</div>
 		</div>
 	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
 </body>
 </html>
