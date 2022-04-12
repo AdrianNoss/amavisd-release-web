@@ -23,13 +23,35 @@ if(isset($_POST['mailid']) && (strlen($_POST['mailid']) > 0)) {
 
 switch ($captcha_service) {
   case 'hCaptcha':
-    $response = file_get_contents("https://hcaptcha.com/siteverify?secret=" . $hcaptcha_secret_key . "&response=".$captcha . "&remoteip=".$_SERVER['REMOTE_ADDR']);
+	$url = "https://hcaptcha.com/siteverify";
+	$secret_key = $hcaptcha_secret_key;
     break;
 
   default:
-    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptcha_secret_key . "&response=" . $captcha . "&remoteip=".$_SERVER['REMOTE_ADDR']);
+	$url = "https://www.google.com/recaptcha/api/siteverify";
+	$secret_key = $recaptcha_secret_key;
     break;
 }
+
+$postdata = http_build_query(
+    array(
+	'secret'   => $secret_key,
+	'response' => $captcha,
+	'remoteip' => $_SERVER['REMOTE_ADDR']
+    )
+);
+
+$opts = array('http' =>
+    array(
+	'method' => 'POST',
+	'header' => 'Content-type: application/x-www-form-urlencoded',
+	'content' => $postdata
+    )
+);
+
+$context = stream_context_create($opts);
+
+$response = file_get_contents($url, false, $context);
 
 $responseKeys = json_decode($response,true);
 if(intval($responseKeys["success"]) !== 1) {
