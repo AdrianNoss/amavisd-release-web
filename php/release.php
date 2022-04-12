@@ -9,7 +9,7 @@ if(isset($_POST['isHuman'])) {
 }
 switch ($captcha_service) {
   case 'hCaptcha':
-    $response = file_get_contents("https://hcaptcha.com/siteverify?secret=" . $hcaptcha_secret_key . "&sitekey=" . $friendlycaptcha_site_key . "&response=".$captcha . "&remoteip=".$_SERVER['REMOTE_ADDR']);
+    $response = file_get_contents("https://hcaptcha.com/siteverify?secret=" . $hcaptcha_secret_key . "&response=".$captcha . "&remoteip=".$_SERVER['REMOTE_ADDR']);
     break;
 
   default:
