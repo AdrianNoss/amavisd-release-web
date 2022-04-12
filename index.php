@@ -1,10 +1,14 @@
 <?php
 	include('include/start.php');	
 
-	if(!isset($_GET["ID"]))
+	if(!isset($_GET["ID"]) || (strlen($_GET["ID"]) == 0))
 	{
 		header("Location: php/error.php");
 	}
+
+	if (!test_id_valid($_GET["ID"])) {
+		header("Location: php/error.php?ID=invalid");
+	};
 ?>
 
 <!DOCTYPE html>
@@ -52,6 +56,7 @@
 							</div>
 							<div class="modal-body">
 								<div id="message"></div>
+								<br>
 								<p><?php lang('Now you can close the browser window');?></p>
 							</div>
 							<div class="modal-footer">
