@@ -1,7 +1,7 @@
 <?php
 	include('include/start.php');	
 
-	if(!isset($_GET["ID"]))
+	if(!isset($_GET["ID"]) || (strlen($_GET["ID"]) == 0))
 	{
 		header("Location: php/error.php");
 	}
