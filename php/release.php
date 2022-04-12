@@ -2,6 +2,11 @@
 
 include('../include/start.php');
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+	echo "550|not a POST request";
+	die();
+}
+
 if(isset($_POST['isHuman'])) {
 	$captcha = $_POST['isHuman'];
 } else {
