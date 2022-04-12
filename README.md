@@ -5,7 +5,7 @@ A small and simple Webinterface for the amavisd-release command
 
 - copy following to your apache's html folder on your mailserver
   - file: index.php
-  - folders incl. files: css include js php
+  - folders incl. files: css include php
 - rename include/config.php.example to include/config.php and edit to suit your needs
 - select Captcha service (Google reCaptcha or hCapture) and add the keys in include/config.php
   - Google: create a reCaptcha api and secret key @ https://www.google.com/recaptcha
