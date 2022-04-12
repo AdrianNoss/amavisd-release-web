@@ -52,6 +52,7 @@
 							</div>
 							<div class="modal-body">
 								<div id="message"></div>
+								<br>
 								<p><?php lang('Now you can close the browser window');?></p>
 							</div>
 							<div class="modal-footer">
