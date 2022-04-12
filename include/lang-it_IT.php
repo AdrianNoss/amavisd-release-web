@@ -13,5 +13,6 @@ $lang['Release Failed']	= "<b>Errore!</b> Impossibile eseguire il rilascio. Cont
 $lang['Mail Release'] = "Rilascio Messaggio";
 
 $lang['No ID Provided'] = 'Nessun numero di riferimento &egrave; stato specificato. In caso di problemi, contatta il tuo Amministratore di Sistema.';
+$lang['Invalid ID Provided'] = 'Numero non valido &egrave; stato specificato. In caso di problemi, contatta il tuo Amministratore di Sistema.';
 
 ?>

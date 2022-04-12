@@ -23,7 +23,7 @@
 		<div class="starter-template">
 			<div class="col-md-8 col-md-offset-2">
 				<div class="alert alert-danger" role="alert">
-					<b><?php lang('No ID Provided');?></b>
+					<b><?php if(isset($_GET["ID"]) && ($_GET["ID"] == 'invalid')) { lang('Invalid ID Provided'); } else { lang('No ID Provided'); };?></b>
 				</div>
 			</div>
 		</div>

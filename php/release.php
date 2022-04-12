@@ -15,6 +15,10 @@ if(isset($_POST['isHuman']) && (strlen($_POST['isHuman']) > 0)) {
 }
 
 if(isset($_POST['mailid']) && (strlen($_POST['mailid']) > 0)) {
+	if (!test_id_valid($_POST['mailid'])) {
+		echo "550|POST data invalid: 'mailid'";
+		die();
+	};
         $ID = escapeshellarg($_POST['mailid']);
 } else {
         echo "550|POST data missing or empty: 'mailid'";

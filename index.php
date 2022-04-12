@@ -5,6 +5,10 @@
 	{
 		header("Location: php/error.php");
 	}
+
+	if (!test_id_valid($_GET["ID"])) {
+		header("Location: php/error.php?ID=invalid");
+	};
 ?>
 
 <!DOCTYPE html>
