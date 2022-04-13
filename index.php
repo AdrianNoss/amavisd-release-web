@@ -173,6 +173,7 @@
 					document.getElementById("myModal").style.opacity = 1;
 					document.getElementById("panel").style.opacity = 0.5;
 					document.getElementById("alert").style.opacity = 0.5;
+					document.getElementById("captcha").style.opacity = 0.5;
 
 					if (code == "250") {
 						document.getElementById("submitBtn").textContent = "<?php lang('Mail released')?>";
