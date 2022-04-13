@@ -99,30 +99,18 @@
 		</div>
 	</div>
 	<script>
+		var isHuman;
+
 		document.getElementById("submitBtn").disabled = true;
 
-		function enableBtn(){
+		function enableBtn(captcha){
 			document.getElementById("submitBtn").disabled = false;
+			isHuman = captcha;
 		}
 
 		function frmRelease(){
 			var formControl = true;
 			var mailid = "<?php Print($_GET["ID"]); ?>";
-<?php
-	switch ($captcha_service) {
-	  case 'hCaptcha':
-?>
-			var isHuman = hcaptcha.getResponse();
-<?php
-		break;
-
-	  default:
-?>
-			var isHuman = grecaptcha.getResponse();
-<?php
-		break;
-	};
-?>
 
 			if(isHuman.length == 0) {
 				formControl = false;
