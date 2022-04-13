@@ -143,6 +143,7 @@
 				})
 				.then(response => {
 					if (!response.ok) {
+						document.getElementById("message").className = 'alert-warning';
 						data = 'HTTP error ' + response.status;
 						throw new Error();
 					};
