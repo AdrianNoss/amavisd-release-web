@@ -51,16 +51,13 @@
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-label="<?php lang('Close'); ?>" id="myModalHeaderClose"><span aria-hidden="true">&times;</span></button>
 								<h4 class="modal-title" id="myModalLabel"><?php lang('Release result'); ?></h4>
 							</div>
 							<div class="modal-body">
 								<div id="message"></div>
-								<br>
-								<p><?php lang('Now you can close the browser window');?></p>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal" id="myModalFooterClose"><?php lang('Close')?></button>
+								<p><?php lang('Now you can close the browser window');?></p>
 							</div>
 						</div>
 					</div>
@@ -103,16 +100,6 @@
 	</div>
 	<script>
 		document.getElementById("submitBtn").disabled = true;
-
-		document.getElementById("myModalHeaderClose").onclick = function() {
-			document.getElementById("myModal").style.display = 'none';
-			document.getElementById("myModal").style.opacity = 0;
-		};
-
-		document.getElementById("myModalFooterClose").onclick = function() {
-			document.getElementById("myModal").style.display = 'none';
-			document.getElementById("myModal").style.opacity = 0;
-		};
 
 		function enableBtn(){
 			document.getElementById("submitBtn").disabled = false;
