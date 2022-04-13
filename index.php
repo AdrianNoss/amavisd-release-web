@@ -171,14 +171,13 @@
 					document.getElementById("submitBtn").disabled = true;
 					document.getElementById("myModal").style.display = 'block';
 					document.getElementById("myModal").style.opacity = 1;
+					document.getElementById("panel").style.opacity = 0.5;
+					document.getElementById("alert").style.opacity = 0.5;
 
 					if (code == "250") {
 						document.getElementById("submitBtn").textContent = "<?php lang('Mail released')?>";
 						document.getElementById("submitBtn").className = "alert alert-dismissable";
 						document.getElementById("submitBtn").style.opacity = 0.5;
-						document.getElementById("panel").style.opacity = 0.5;
-						document.getElementById("alert").style.opacity = 0.5;
-						document.getElementById("captcha").style.opacity = 0;
 					};
 				});
 			};
