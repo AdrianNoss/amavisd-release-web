@@ -1,6 +1,6 @@
 <?php
 
-$lang['Now you can close the browser window'] =	'Sie können das Browserfenster nun schließen..';
+$lang['Now you can close the browser window'] =	'Sie können das Browserfenster nun schließen.';
 $lang['Release result'] = 'Freigabe Ergebnis';
 $lang['Close'] = 'Schließen';
 $lang['Warning'] = 'Achtung';
