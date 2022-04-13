@@ -26,6 +26,12 @@
 ?>
 	<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 <?php
+		  break;
+
+	  case 'FriendlyCaptcha':
+?>
+	<script src="https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.1/widget.module.min.js" async defer></script>
+<?php
 		break;
 
 	  default:
@@ -80,6 +86,12 @@
 	  case 'hCaptcha':
 ?>
 					<div class="h-captcha" data-sitekey="<?php echo $hcaptcha_site_key ?>" data-callback="enableBtn" id="captcha"></div>
+<?php
+		  break;
+
+	  case 'FriendlyCaptcha':
+?>
+					<div class="frc-captcha" data-sitekey="<?php echo $friendlycaptcha_site_key ?>" data-callback="enableBtn" id="captcha"></div>
 <?php
 		break;
 
