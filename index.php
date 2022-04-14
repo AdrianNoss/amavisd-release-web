@@ -4,6 +4,7 @@
 	if(!isset($_GET["ID"]) || (strlen($_GET["ID"]) == 0))
 	{
 		header("Location: php/error.php");
+		die();
 	}
 
 	if (!test_id_valid($_GET["ID"])) {
@@ -24,7 +25,7 @@
 	switch ($captcha_service) {
 	  case 'hCaptcha':
 ?>
-	<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+	<script src="https://js.hcaptcha.com/1/api.js?hl=<?php echo $language ?>" async defer></script>
 <?php
 		  break;
 
@@ -36,7 +37,7 @@
 
 	  default:
 ?>
-	<script src='https://www.google.com/recaptcha/api.js' async defer></script>
+	<script src='https://www.google.com/recaptcha/api.js?hl=<?php echo $language ?>' async defer></script>
 <?php
 		break;
 	};
@@ -92,7 +93,7 @@
 
 	  case 'FriendlyCaptcha':
 ?>
-					<div class="frc-captcha" data-sitekey="<?php echo $friendlycaptcha_site_key ?>" data-callback="enableBtn" id="captcha"></div>
+					<div class="frc-captcha" data-sitekey="<?php echo $friendlycaptcha_site_key ?>" data-callback="enableBtn" data-lang="<?php echo $language ?>" id="captcha"></div>
 <?php
 		break;
 
