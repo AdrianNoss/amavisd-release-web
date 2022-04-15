@@ -80,6 +80,7 @@
 				<div class="alert alert-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?>" role="alert" id="alert">
 					<b><?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) lang('Release warning'); else if (preg_match("/^(archive|clean)/", $_GET["ID"])) lang('Release info'); else lang('Release alert')?></b>
 				</div>
+				<noscript><b><font color="red"> You need Javascript for CAPTCHA verification to submit this form.</font></b></noscript>
 				<form role="form" id="frmRelease" action="javascript:frmRelease()">
 <?php
 	switch ($captcha_service) {
