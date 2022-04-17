@@ -38,7 +38,7 @@
   if (isset($recaptchca_secret_key) && ! isset($recaptcha_secret_key)) { $recaptcha_secret_key = $recaptchca_secret_key; };
 
   function test_id_valid($id) {
-    $id_pattern = "/^[0-9a-zA-Z.-_]+$/";
+    $id_pattern = "/^[0-9a-zA-Z.\-_]+$/";
     return (preg_match($id_pattern, $id));
   };
 // vim: set noai ts=2 sw=2 et:
