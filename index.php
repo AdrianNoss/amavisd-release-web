@@ -30,7 +30,7 @@
 
 	  case 'FriendlyCaptcha':
 ?>
-	<script src="https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.1/widget.module.min.js" async defer></script>
+	<script src="https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.1/widget.min.js" async defer></script>
 <?php
 		break;
 
