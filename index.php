@@ -105,7 +105,7 @@
 ?>
 					<p></p>
 					<div class="form-group text-left">
-						<button type="submit" id="submitBtn" class="btn btn-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?> btn-lg"><?php lang('Release Mail')?></button>
+						<button disabled type="submit" id="submitBtn" class="btn btn-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?> btn-lg"><?php lang('Release Mail')?></button>
 					</div>
 				</form>
 			</div>
@@ -113,8 +113,6 @@
 	</div>
 	<script>
 		var isHuman;
-
-		document.getElementById("submitBtn").disabled = true;
 
 		function enableBtn(captcha){
 			document.getElementById("submitBtn").disabled = false;
