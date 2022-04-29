@@ -26,6 +26,12 @@
 ?>
 	<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 <?php
+		  break;
+
+	  case 'FriendlyCaptcha':
+?>
+	<script src="https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.1/widget.min.js" async defer></script>
+<?php
 		break;
 
 	  default:
@@ -74,12 +80,19 @@
 				<div class="alert alert-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?>" role="alert" id="alert">
 					<b><?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) lang('Release warning'); else if (preg_match("/^(archive|clean)/", $_GET["ID"])) lang('Release info'); else lang('Release alert')?></b>
 				</div>
+				<noscript><b><font color="red"> You need Javascript for CAPTCHA verification to submit this form.</font></b></noscript>
 				<form role="form" id="frmRelease" action="javascript:frmRelease()">
 <?php
 	switch ($captcha_service) {
 	  case 'hCaptcha':
 ?>
 					<div class="h-captcha" data-sitekey="<?php echo $hcaptcha_site_key ?>" data-callback="enableBtn" id="captcha"></div>
+<?php
+		  break;
+
+	  case 'FriendlyCaptcha':
+?>
+					<div class="frc-captcha" data-sitekey="<?php echo $friendlycaptcha_site_key ?>" data-callback="enableBtn" id="captcha"></div>
 <?php
 		break;
 
@@ -92,37 +105,23 @@
 ?>
 					<p></p>
 					<div class="form-group text-left">
-						<button type="submit" id="submitBtn" class="btn btn-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?> btn-lg"><?php lang('Release Mail')?></button>
+						<button disabled type="submit" id="submitBtn" class="btn btn-<?php if (preg_match("/^(spam|badh|banned)/", $_GET["ID"])) print "warning"; else if (preg_match("/^(archive|clean)/", $_GET["ID"])) print "info"; else print "danger" ?> btn-lg"><?php lang('Release Mail')?></button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	<script>
-		document.getElementById("submitBtn").disabled = true;
+		var isHuman;
 
-		function enableBtn(){
+		function enableBtn(captcha){
 			document.getElementById("submitBtn").disabled = false;
+			isHuman = captcha;
 		}
 
 		function frmRelease(){
 			var formControl = true;
 			var mailid = "<?php Print($_GET["ID"]); ?>";
-<?php
-	switch ($captcha_service) {
-	  case 'hCaptcha':
-?>
-			var isHuman = hcaptcha.getResponse();
-<?php
-		break;
-
-	  default:
-?>
-			var isHuman = grecaptcha.getResponse();
-<?php
-		break;
-	};
-?>
 
 			if(isHuman.length == 0) {
 				formControl = false;

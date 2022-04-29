@@ -25,25 +25,33 @@ if(isset($_POST['mailid']) && (strlen($_POST['mailid']) > 0)) {
         die();
 }
 
+$postdata_array = array();
+
 switch ($captcha_service) {
   case 'hCaptcha':
 	$url = "https://hcaptcha.com/siteverify";
-	$secret_key = $hcaptcha_secret_key;
+	$postdata_array['secret']   = $hcaptcha_secret_key;
+	$postdata_array['response'] = $captcha;
+	$postdata_array['sitekey']  = $hcaptcha_site_key;
+	$postdata_array['remoteip'] = $_SERVER['REMOTE_ADDR'];
+    break;
+
+  case 'FriendlyCaptcha':
+	$url = "https://api.friendlycaptcha.com/api/v1/siteverify";
+	$postdata_array['secret']   = $friendlycaptcha_secret_key;
+	$postdata_array['solution'] = $captcha;
+	$postdata_array['sitekey']  = $friendlycaptcha_site_key;
     break;
 
   default:
 	$url = "https://www.google.com/recaptcha/api/siteverify";
-	$secret_key = $recaptcha_secret_key;
+	$postdata_array['secret']   = $recaptcha_secret_key;
+	$postdata_array['response'] = $captcha;
+	$postdata_array['remoteip'] = $_SERVER['REMOTE_ADDR'];
     break;
 }
 
-$postdata = http_build_query(
-    array(
-	'secret'   => $secret_key,
-	'response' => $captcha,
-	'remoteip' => $_SERVER['REMOTE_ADDR']
-    )
-);
+$postdata = http_build_query($postdata_array);
 
 $opts = array('http' =>
     array(

@@ -6,9 +6,12 @@
 	/* supported Captcha services
 		- Google reCaptcha https://www.google.com/recaptcha/ (default)
 		- hCaptcha https://docs.hcaptcha.com/
+		- FriendlyCaptcha https://docs.friendlycaptcha.com/
 	*/
 
+	// default: Google's reCaptcha
 	// ENABLE-IN-CASE: $captcha_service = 'hCaptcha';
+	// ENABLE-IN-CASE: $captcha_service = 'FriendlyCaptcha';
 
 
 	/* Google reCaptcha (replace dummy keys with real ones) */
@@ -29,6 +32,15 @@
 	$hcaptcha_secret_key = '0x<HEX-CHAR-SECRET-KEY>';
 
 	
+	/* Friendly Captcha (replace dummy keys with real ones) */
+
+	// FriendlyCaptcha site key
+	$friendlycaptcha_site_key = '<SITE-KEY: [A-Z0-9]+>';
+
+	// FriendlyCaptcha secret key
+	$friendlycaptcha_secret_key = '<SECRET-KEY: [A-Z0-9]+>';
+
+
 	// Your default Language
 	$language = 'it_IT';
 	
