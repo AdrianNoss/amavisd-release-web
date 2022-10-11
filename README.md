@@ -19,7 +19,7 @@ A small and simple Webinterface for the amavisd-release command
 
   `$notify_virus_recips_templ = read_text("/etc/amavisd/template-virus-recipient.txt");`
 
-- add the apache user to the sudoer file and allow "sudo amavisd-release ID" without password:
+- add the apache user to the sudoer file and allow "sudo amavisd-release <ID> [<RCPT>]" without password:
 
   - example #1
 
