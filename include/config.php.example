@@ -41,8 +41,8 @@
 	$friendlycaptcha_secret_key = '<SECRET-KEY: [A-Z0-9]+>';
 
 
-	// Your default Language
-	$language = 'it_IT';
+	// Your default Language (see supported ones by files: lang-<CountryCode>.php)
+	$language = 'en';
 	
 	//Website Title
 	$site_title = 'amavisd-release-web';
