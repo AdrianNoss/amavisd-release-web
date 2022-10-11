@@ -2,6 +2,8 @@
 
 include('../include/start.php');
 
+$R=""; # default empty
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	echo "550|not a POST request";
 	die();
@@ -23,6 +25,14 @@ if(isset($_POST['mailid']) && (strlen($_POST['mailid']) > 0)) {
 } else {
         echo "550|POST data missing or empty: 'mailid'";
         die();
+}
+
+if(isset($_POST['rcpt']) && (strlen($_POST['rcpt']) > 0)) {
+	if (!filter_var($_POST['rcpt'], FILTER_VALIDATE_EMAIL)) {
+		echo "550|POST data invalid: 'rcpt'";
+		die();
+	};
+        $R = escapeshellarg($_POST['rcpt']);
 }
 
 $postdata_array = array();
@@ -71,7 +81,7 @@ if(intval($responseKeys["success"]) !== 1) {
     die();
 }
 
-exec("sudo amavisd-release $ID  2>&1", $out, $retcode );
+exec("sudo amavisd-release $ID $R 2>&1", $out, $retcode );
 if ($retcode != 0) {
     echo "550|release execution failed";
     die();
