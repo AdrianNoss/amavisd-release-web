@@ -11,6 +11,12 @@
 		header("Location: php/error.php?ID=invalid");
 		die();
 	};
+
+	if(isset($_GET["R"]) && !filter_var($_GET["R"], FILTER_VALIDATE_EMAIL))
+	{
+		header("Location: php/error.php");
+		die();
+	}
 ?>
 
 <!DOCTYPE html>
@@ -124,6 +130,7 @@
 		function frmRelease(){
 			var formControl = true;
 			var mailid = "<?php Print($_GET["ID"]); ?>";
+			var rcpt = "<?php Print($_GET["R"]); ?>";
 
 			if(isHuman.length == 0) {
 				formControl = false;
@@ -136,6 +143,7 @@
 
 				var data = new FormData();
 				data.append("mailid", mailid);
+				data.append("rcpt", rcpt);
 				data.append("isHuman", isHuman);
 
 				fetch("php/release.php", {
