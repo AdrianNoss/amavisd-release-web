@@ -1,5 +1,5 @@
 # amavisd-release-web
-A small and simple Webinterface for the amavisd-release command
+A small and simple Webinterface for the `amavisd-release` command
 
 ## How to install:
 
