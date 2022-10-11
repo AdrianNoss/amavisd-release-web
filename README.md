@@ -13,13 +13,13 @@ A small and simple Webinterface for the amavisd-release command
   - FriendlyCaptcha: create site and secret key @ https://friendlycaptcha.com/
 - copy the amavisd-new templates from amavis-templ to your amavisd-new template or config folder
 - customize the templates and the php files for your needs (title, links etc)
-- activate the templates in /etc/amavisd/amavisd.conf (example)
+- activate the templates in `/etc/amavisd/amavisd.conf` (example)
 
   `$notify_virus_admin_templ = read_text("/etc/amavisd/template-virus-admin.txt");`
 
   `$notify_virus_recips_templ = read_text("/etc/amavisd/template-virus-recipient.txt");`
 
-- add the apache user to the sudoer file and allow "sudo amavisd-release <ID> [<RCPT>]" without password:
+- add the apache user to the sudoer file and allow `sudo amavisd-release <ID> [<RCPT>]` without password:
 
   - example #1
 
