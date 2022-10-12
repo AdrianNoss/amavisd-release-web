@@ -2,7 +2,9 @@
 
 include('../include/start.php');
 
-$R=""; # default empty
+# explicit recipient, default empty, only required in case of "banned"
+#  see also: https://mailing.unix.amavis-user.narkive.com/Zr5XTPyl/amavis-user-releasing-mail-from-clean-quarantine
+$R="";
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	echo "550|not a POST request";
@@ -32,7 +34,10 @@ if(isset($_POST['rcpt']) && (strlen($_POST['rcpt']) > 0)) {
 		echo "550|POST data invalid: 'rcpt'";
 		die();
 	};
-        $R = escapeshellarg($_POST['rcpt']);
+
+	if (preg_match("/^(banned)/", $_POST['mailid'])) {
+		$R = escapeshellarg($_POST['rcpt']);
+	};
 }
 
 $postdata_array = array();
@@ -97,6 +102,9 @@ if($code !== "250") {
   };
 } else {
   $retstring = $code."|ID released: " . $ID;
+  if (strlen($R) > 0) {
+    $retstring = $retstring . " recipient: " . $R;
+  };
 };
 
 echo $retstring;
