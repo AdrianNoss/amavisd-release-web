@@ -37,7 +37,7 @@ Content Typ: [:ccat|name|main]#
 
 [? %q | |Sollte es sich um einen Fehlalarm handeln und Sie sind sich sicher, dass diese Mail harmlos ist, klicken sie auf diesen Link: 
 
-https://antispam.bond.de/index.php?ID=%q&R=%R
+https://%h/amavisd-release-web/?ID=%q&R=%R
 
 Dort koennen Sie die Mail aus der Quarantaene freigeben] 
 
@@ -80,6 +80,6 @@ Our internal reference code for your message is %n/%i
 [? %j |#|[:wrap|78||  |Subject: %j]]
 [? %q |Not quarantined.|The message has been quarantined as: %q]
 
-[? %q | |You can release the Mail by yourself with this Link: https://antispam.bond.de/index.php?ID=%q&R=%R]
+[? %q | |You can release the Mail by yourself with this Link: https://%h/amavisd-release-web/?ID=%q&R=%R]
 
 Please contact your system administrator for details.
