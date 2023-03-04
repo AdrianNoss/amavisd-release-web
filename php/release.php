@@ -2,6 +2,10 @@
 
 include('../include/start.php');
 
+# explicit recipient, default empty, only required in case of "banned"
+#  see also: https://mailing.unix.amavis-user.narkive.com/Zr5XTPyl/amavis-user-releasing-mail-from-clean-quarantine
+$R="";
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	echo "550|not a POST request";
 	die();
@@ -23,6 +27,17 @@ if(isset($_POST['mailid']) && (strlen($_POST['mailid']) > 0)) {
 } else {
         echo "550|POST data missing or empty: 'mailid'";
         die();
+}
+
+if(isset($_POST['rcpt']) && (strlen($_POST['rcpt']) > 0)) {
+	if (!filter_var($_POST['rcpt'], FILTER_VALIDATE_EMAIL)) {
+		echo "550|POST data invalid: 'rcpt'";
+		die();
+	};
+
+	if (preg_match("/^(banned)/", $_POST['mailid'])) {
+		$R = escapeshellarg($_POST['rcpt']);
+	};
 }
 
 $postdata_array = array();
@@ -71,7 +86,7 @@ if(intval($responseKeys["success"]) !== 1) {
     die();
 }
 
-exec("sudo amavisd-release $ID  2>&1", $out, $retcode );
+exec("sudo amavisd-release $ID $R 2>&1", $out, $retcode );
 if ($retcode != 0) {
     echo "550|release execution failed";
     die();
@@ -87,6 +102,9 @@ if($code !== "250") {
   };
 } else {
   $retstring = $code."|ID released: " . $ID;
+  if (strlen($R) > 0) {
+    $retstring = $retstring . " recipient: " . $R;
+  };
 };
 
 echo $retstring;
