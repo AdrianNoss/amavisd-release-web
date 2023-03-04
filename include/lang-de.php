@@ -19,4 +19,6 @@ $lang['Antispam Mail Release'] = 'Antispam Mail Freigabe';
 $lang['No ID Provided'] = 'Es wurde keine Referenznummer angegeben. Bei Problemen melden Sie sich bitte bei Ihrem Administrator.';
 $lang['Invalid ID Provided'] = 'Inkorrekte Referenznummer angegeben. Bei Problemen melden Sie sich bitte bei Ihrem Administrator.';
 
+$lang['Please wait'] = 'Bitte warten...';
+
 ?>

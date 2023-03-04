@@ -138,6 +138,8 @@
 
 			if(formControl) {
 				document.getElementById("message").className = 'alert';
+				document.getElementById("submitBtn").disabled = true;
+				document.getElementById("submitBtn").textContent = "<?php lang('Please wait')?>";
 				var data = "PROBLEM"; // default
 				var code;
 
