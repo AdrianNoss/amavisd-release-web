@@ -28,6 +28,16 @@
 	<title><?php echo $site_title;?> - <?php lang('Mail Release')?></title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/starter-template.css" rel="stylesheet">
+	<style>
+		@keyframes blinking {
+		      0%   { opacity: 0.2; }
+		      50%  { opacity: 0.8; }
+		      100% { opacity: 0.2; }
+		}
+		.btn-blink {
+			animation: blinking 1500ms infinite;
+		}
+	</style>
 <?php
 	switch ($captcha_service) {
 	  case 'hCaptcha':
@@ -139,7 +149,8 @@
 			if(formControl) {
 				document.getElementById("message").className = 'alert';
 				document.getElementById("submitBtn").disabled = true;
-				document.getElementById("submitBtn").textContent = "<?php lang('Please wait')?>";
+				document.getElementById("submitBtn").textContent = "<?php lang('Please wait')?>...";
+				document.getElementById("submitBtn").className = "btn btn-info btn-lg btn-blink";
 				var data = "PROBLEM"; // default
 				var code;
 
@@ -180,7 +191,6 @@
 				})
 				.catch(error => {
 					document.getElementById("message").innerHTML = data;
-					document.getElementById("submitBtn").disabled = true;
 					document.getElementById("myModal").style.display = 'block';
 					document.getElementById("myModal").style.opacity = 1;
 					document.getElementById("panel").style.opacity = 0.5;

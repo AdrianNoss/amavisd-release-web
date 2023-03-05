@@ -16,6 +16,6 @@ $lang['Mail released'] = 'Messaggio Rilasciata';
 $lang['No ID Provided'] = 'Nessun numero di riferimento &egrave; stato specificato. In caso di problemi, contatta il tuo Amministratore di Sistema.';
 $lang['Invalid ID Provided'] = 'Numero non valido &egrave; stato specificato. In caso di problemi, contatta il tuo Amministratore di Sistema.';
 
-$lang['Please wait'] = 'Un momento, per favore...';
+$lang['Please wait'] = 'Un momento, per favore';
 
 ?>
