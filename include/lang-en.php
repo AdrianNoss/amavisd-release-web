@@ -11,6 +11,6 @@ $lang['Release Failed']	= '<b>Error!</b> Release was not successful. Please cont
 $lang['No ID Provided'] = 'No ID provided. In case of problems contact your administrator.';
 $lang['Invalid ID Provided'] = 'Incorrect ID provided. In case of problems contact your administrator.';
 
-$lang['Please wait'] = 'Please wait...';
+$lang['Please wait'] = 'Please wait';
 
 ?>
