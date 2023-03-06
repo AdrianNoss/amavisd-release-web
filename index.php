@@ -200,8 +200,11 @@
 					if (code == "250") {
 						document.getElementById("submitBtn").textContent = "<?php lang('Mail released')?>";
 						document.getElementById("submitBtn").className = "alert alert-dismissable";
-						document.getElementById("submitBtn").style.opacity = 0.5;
+					} else {
+						document.getElementById("submitBtn").textContent = "<?php lang('Problem')?>!";
+						document.getElementById("submitBtn").className = "alert";
 					};
+					document.getElementById("submitBtn").style.opacity = 0.5;
 				});
 			};
 		};
