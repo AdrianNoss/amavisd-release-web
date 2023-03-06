@@ -26,8 +26,9 @@
   $lang_accept_browser_array[] = 'en';
 
   // run through languages and check for support
+  if (! isset($path_extension)) {$path_extension = ''; };
   foreach ($lang_accept_browser_array as $tmp) {
-    if (file_exists(getcwd() . '/include/' . 'lang-' . $tmp . '.php')) {
+    if (file_exists(getcwd() . $path_extension . '/include/' . 'lang-' . $tmp . '.php')) {
       $language = $tmp;
       include('lang-' . $language . '.php');
       break;

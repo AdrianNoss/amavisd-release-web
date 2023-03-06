@@ -1,4 +1,5 @@
 <?php
+	$path_extension = '/..';
 	include('../include/start.php');
 ?>
 <!DOCTYPE html>
