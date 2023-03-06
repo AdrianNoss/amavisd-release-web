@@ -140,7 +140,7 @@
 		function frmRelease(){
 			var formControl = true;
 			var mailid = "<?php Print($_GET["ID"]); ?>";
-			var rcpt = "<?php Print($_GET["R"]); ?>";
+			var rcpt = "<?php if (isset($_GET["R"])) { Print($_GET["R"]); } else { Print(""); }; ?>";
 
 			if(isHuman.length == 0) {
 				formControl = false;

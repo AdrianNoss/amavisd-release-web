@@ -4,6 +4,9 @@
   // fallback for config.php < 2022-04-14 (language file renamed)
   if (isset($langugage) && $langugage == 'it_IT') { $language = 'it'; };
 
+  // fill empty (default) to avoid warnings
+  if (! isset($captcha_service)) { $captcha_service = "reCaptcha"; };
+
   // language handling
   $lang_accept_browser_array = array();
 
