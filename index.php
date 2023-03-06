@@ -52,6 +52,12 @@
 <?php
 		break;
 
+	  case 'CloudflareTurnstile':
+?>
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<?php
+		break;
+
 	  default:
 ?>
 	<script src='https://www.google.com/recaptcha/api.js?hl=<?php echo $language ?>' async defer></script>
@@ -111,6 +117,12 @@
 	  case 'FriendlyCaptcha':
 ?>
 					<div class="frc-captcha" data-sitekey="<?php echo $friendlycaptcha_site_key ?>" data-callback="enableBtn" data-lang="<?php echo $language ?>" id="captcha"></div>
+<?php
+		break;
+
+	  case 'CloudflareTurnstile':
+?>
+					<div class="cf-turnstile" data-sitekey="<?php echo $cloudflare_turnstile_site_key ?>" data-callback="enableBtn" data-language="<?php echo $language ?>" id="captcha"></div>
 <?php
 		break;
 

@@ -58,6 +58,13 @@ switch ($captcha_service) {
 	$postdata_array['sitekey']  = $friendlycaptcha_site_key;
     break;
 
+  case 'CloudflareTurnstile':
+	$url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+	$postdata_array['secret']   = $cloudflare_turnstile_secret_key;
+	$postdata_array['response'] = $captcha;
+	$postdata_array['remoteip'] = $_SERVER['REMOTE_ADDR'];
+    break;
+
   default:
 	$url = "https://www.google.com/recaptcha/api/siteverify";
 	$postdata_array['secret']   = $recaptcha_secret_key;
