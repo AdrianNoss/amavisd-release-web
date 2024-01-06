@@ -21,10 +21,15 @@ Summary:   Web interface to release e-mails from Amavs quarantine
 License:   MIT
 URL:       https://github.com/AdrianNoss/amavisd-release-web
 Group:     Unspecified
+
 Requires:  php-fpm
 Requires:  amavis
 Requires:  httpd
 Requires:  sudo
+
+BuildRequires:    checkpolicy
+BuildRequires:    selinux-policy-devel
+
 
 %if 0%{?gitcommit:1}
 Source0:   https://github.com/pbiering/amavisd-release-web/archive/%{gitcommit}/amavisd-release-web-%{gitcommit}.tar.gz
