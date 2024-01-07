@@ -1,6 +1,6 @@
 #!/bin/perl -W
 #
-# (P) & (C) 2019-2022 by Peter Bieringer <pb@bieringer.de>
+# (P) & (C) 2019-2024 by Peter Bieringer <pb@bieringer.de>
 #
 # This program supports "amavisd-release-web" by sending on regular basis (cron)
 # notification e-mails to recipients, when entries in quarantine were found
@@ -27,6 +27,7 @@
 # 20201117/PB: display original X-Spam-Level in message
 # 20220924/PB: add option -L/-U for Spam-Score limits
 # 20221011/PB: add recipient on release URL for "banned"
+# 20240107/PB: fix for catching only "spam" on limit checks
 
 use strict;
 use warnings;
@@ -197,6 +198,7 @@ while (readdir $dh) {
 			};
 			$quarantine{$entry}->{$key} = decode("MIME-Header", $value);
 			$quarantine{$entry}->{$key} =~ s/[^\x00-\x7f]//og;
+			$quarantine{$entry}->{'type'} = $type;
 			$recipients{$value}++ if ($key eq "X-Envelope-To");
 		};
 	};
@@ -266,7 +268,7 @@ foreach my $recipient (sort keys %recipients) {
 		next if $quarantine{$entry}->{'X-Envelope-To'} ne $recipient;
 
 		if (defined $opts{'L'} || defined $opts{'U'}) {
-			if (defined $quarantine{$entry}->{'X-Spam-Score'}) {
+			if (defined $quarantine{$entry}->{'X-Spam-Score'} && $quarantine{$entry}->{'type'} eq "spam") {
 				# check for spam score limits
 				next if (defined $opts{'L'} && $quarantine{$entry}->{'X-Spam-Score'} <  $opts{'L'});
 				next if (defined $opts{'U'} && $quarantine{$entry}->{'X-Spam-Score'} >= $opts{'U'});
