@@ -15,9 +15,9 @@
 
 Name:      amavisd-release-web
 BuildArch: noarch
-Version:   1.0.0
-Release:   1
-Summary:   Web interface to release e-mails from Amavs quarantine
+Version:   1.0.1
+Release:   2
+Summary:   Web interface to release e-mails from Amavis quarantine
 License:   MIT
 URL:       https://github.com/AdrianNoss/amavisd-release-web
 Group:     Unspecified
@@ -49,11 +49,19 @@ optional protected by CAPTCHA
 
 
 %package selinux
-Summary:   SELinux extension for Web interface to release e-mails from Amavs quarantine
-
+Summary: SELinux extension for Web interface to release e-mails from Amavis quarantine
+Requires: %{name}
 
 %description selinux
 SELinux extension for Web interface to release e-mails from Amavs quarantine
+
+
+%package notify
+Summary: Regular notification extension for Web interface to release e-mails from Amavis quarantine
+Requires: %{name}
+
+%description notify
+Regular notification for Web interface to release e-mails from Amavis quarantine
 
 
 %prep
@@ -82,24 +90,71 @@ install -d %{buildroot}%{wwwdir}/%{name}/include
 %{__cp} include/config.php.example %{buildroot}%{wwwdir}/%{name}/include/config.php
 
 
+## Package templates
+install -d %{buildroot}%{_sysconfdir}/amavisd/
+for f in amavis-templ/template*.txt; do
+	%{__cp} $f %{buildroot}%{_sysconfdir}/amavisd/amavis-release-web-$(basename $f)
+done
+
+
 ## Create required sudo file
 install -d %{buildroot}%{_sysconfdir}/sudoers.d/
 cat <<END >%{buildroot}%{_sysconfdir}/sudoers.d/99-amavisd-release-web 
 apache 		ALL=NOPASSWD:/bin/amavisd-release
 END
 
+
 ## Create httpd extension
 install -d %{buildroot}%{_sysconfdir}/httpd/conf.d/
 cat <<END >%{buildroot}%{_sysconfdir}/httpd/conf.d/amavisd-release-web.conf
 ## amavisd-release-web config for Apache httpd
 
-# only activate in case of PHP is active
 Alias /amavisd-release-web /var/www/amavisd-release-web
 
 <Location /amavisd-release-web>
 	DirectoryIndex index.php
 	Options -Indexes
 </Location>
+END
+
+
+## Notify
+install -d %{buildroot}%{_sbindir}
+install -d %{buildroot}%{_sysconfdir}/cron.d
+
+install -m 750 cron/amavisd-quarantine-notify.pl %{buildroot}%{_sbindir}
+
+# empty configuration file
+cat <<END >%{buildroot}%{_sysconfdir}/amavisd/amavisd-release-web-recipients
+## whitelist/blacklist of recipients to send regular quarantine notifications
+#
+#  *** in case nothing is defined not filter is applied ***
+#
+#  # whitelisted user
+#  user@want-to-be-informed.domain.example
+#  # whitelisted domain
+#  @want-to-be-informed.domain.example
+#  # blacklisted user
+#  !user@dont-care-about-rejected-spams.domain.example
+#  # blacklisted domain
+#  !@dont-care-about-rejected-spams.domain.example
+#
+# remove/adjust next line
+@domain.example
+END
+
+# cron job
+cat <<END >%{buildroot}%{_sysconfdir}/cron.d/amavisd-quarantine-notify.cron
+## send regular quarantine status to recipients whitelisted in
+## %{_sysconfdir}/amavisd/amavisd-release-web-recipients
+
+## 2-staged notifications
+
+# every 4 hours with history of 5 hours and Spam-Score < 20
+34 */4 * * * amavis /usr/sbin/amavisd-quarantine-notify.pl -H 5  -U 20
+
+# every day with history of 25 hours and Spam-Score >= 20
+28 6   * * * amavis /usr/sbin/amavisd-quarantine-notify.pl -H 25 -L 20
 END
 
 
@@ -165,6 +220,8 @@ Apply local configurations to %{wwwdir}/%{name}/include/config.php
 - CAPTCHA service configuration
 END
 
+Adjust local 'amavis' configuration related to included notification templates
+
 
 %post selinux
 for selinuxvariant in %{selinux_variants}
@@ -215,9 +272,11 @@ fi
 %{wwwdir}/%{name}/include/start.php
 %{wwwdir}/%{name}/include/functions.php
 
+%{_sysconfdir}/amavisd/amavis-release-web-*.txt
+
 %config(noreplace) %{wwwdir}/%{name}/include/config.php
 
-%{_sysconfdir}/sudoers.d/99-amavisd-release-web
+%config(noreplace) %{_sysconfdir}/sudoers.d/99-amavisd-release-web
 
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/amavisd-release-web.conf
 
@@ -226,6 +285,18 @@ fi
 %{_datadir}/selinux/*/%{name}.pp
 
 
+%files notify
+%attr(750,root,amavis) %{_sbindir}/amavisd-quarantine-notify.pl
+
+%config(noreplace) %{_sysconfdir}/amavisd/amavisd-release-web-recipients
+
+%config(noreplace) %{_sysconfdir}/cron.d/amavisd-quarantine-notify.cron
+
+
 %changelog
+* Mon Jan 01 2024 Peter Bieringer <pb@bieringer.de> - 1.0.1-2
+- Add notification templates
+- Add subpackage "notify"
+
 * Mon Jan 01 2024 Peter Bieringer <pb@bieringer.de> - 1.0.0-1
 - Initial release 1.0.0
