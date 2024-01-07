@@ -17,5 +17,6 @@ $lang['No ID Provided'] = 'Nessun numero di riferimento &egrave; stato specifica
 $lang['Invalid ID Provided'] = 'Numero non valido &egrave; stato specificato. In caso di problemi, contatta il tuo Amministratore di Sistema.';
 
 $lang['Please wait'] = 'Un momento, per favore';
+$lang['Problem'] = 'Il problema';
 
 ?>

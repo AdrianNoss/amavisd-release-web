@@ -4,6 +4,9 @@
   // fallback for config.php < 2022-04-14 (language file renamed)
   if (isset($langugage) && $langugage == 'it_IT') { $language = 'it'; };
 
+  // fill empty (default) to avoid warnings
+  if (! isset($captcha_service)) { $captcha_service = "reCaptcha"; };
+
   // language handling
   $lang_accept_browser_array = array();
 
@@ -23,8 +26,9 @@
   $lang_accept_browser_array[] = 'en';
 
   // run through languages and check for support
+  if (! isset($path_extension)) {$path_extension = ''; };
   foreach ($lang_accept_browser_array as $tmp) {
-    if (file_exists(getcwd() . '/include/' . 'lang-' . $tmp . '.php')) {
+    if (file_exists(getcwd() . $path_extension . '/include/' . 'lang-' . $tmp . '.php')) {
       $language = $tmp;
       include('lang-' . $language . '.php');
       break;

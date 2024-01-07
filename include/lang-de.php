@@ -20,5 +20,6 @@ $lang['No ID Provided'] = 'Es wurde keine Referenznummer angegeben. Bei Probleme
 $lang['Invalid ID Provided'] = 'Inkorrekte Referenznummer angegeben. Bei Problemen melden Sie sich bitte bei Ihrem Administrator.';
 
 $lang['Please wait'] = 'Bitte warten';
+$lang['Problem'] = 'Problem';
 
 ?>

@@ -52,6 +52,12 @@
 <?php
 		break;
 
+	  case 'CloudflareTurnstile':
+?>
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<?php
+		break;
+
 	  default:
 ?>
 	<script src='https://www.google.com/recaptcha/api.js?hl=<?php echo $language ?>' async defer></script>
@@ -114,6 +120,12 @@
 <?php
 		break;
 
+	  case 'CloudflareTurnstile':
+?>
+					<div class="cf-turnstile" data-sitekey="<?php echo $cloudflare_turnstile_site_key ?>" data-callback="enableBtn" data-language="<?php echo $language ?>" id="captcha"></div>
+<?php
+		break;
+
 	  default:
 ?>
 					<div class="g-recaptcha" data-sitekey="<?php echo $recaptcha_api_key ?>" data-callback="enableBtn" id="captcha"></div>
@@ -140,7 +152,7 @@
 		function frmRelease(){
 			var formControl = true;
 			var mailid = "<?php Print($_GET["ID"]); ?>";
-			var rcpt = "<?php Print($_GET["R"]); ?>";
+			var rcpt = "<?php if (isset($_GET["R"])) { Print($_GET["R"]); } else { Print(""); }; ?>";
 
 			if(isHuman.length == 0) {
 				formControl = false;
@@ -200,8 +212,11 @@
 					if (code == "250") {
 						document.getElementById("submitBtn").textContent = "<?php lang('Mail released')?>";
 						document.getElementById("submitBtn").className = "alert alert-dismissable";
-						document.getElementById("submitBtn").style.opacity = 0.5;
+					} else {
+						document.getElementById("submitBtn").textContent = "<?php lang('Problem')?>!";
+						document.getElementById("submitBtn").className = "alert";
 					};
+					document.getElementById("submitBtn").style.opacity = 0.5;
 				});
 			};
 		};

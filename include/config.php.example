@@ -12,6 +12,7 @@
 	// default: Google's reCaptcha
 	// ENABLE-IN-CASE: $captcha_service = 'hCaptcha';
 	// ENABLE-IN-CASE: $captcha_service = 'FriendlyCaptcha';
+	// ENABLE-IN-CASE: $captcha_service = 'CloudflareTurnstile';
 
 
 	/* Google reCaptcha (replace dummy keys with real ones) */
@@ -39,6 +40,15 @@
 
 	// FriendlyCaptcha secret key
 	$friendlycaptcha_secret_key = '<SECRET-KEY: [A-Z0-9]+>';
+
+
+        /* Cloudflare Turnstile ((replace dummy keys with real ones) */
+
+        // Cloudflare Turnstile site key
+        $cloudflare_turnstile_site_key   = '0x<BASE64-SITE-KEY>';
+
+        // Cloudflare Turnstile secret key
+        $cloudflare_turnstile_secret_key = '0x<BASE64-SECRET-KEY-WITH-DASHES>';
 
 
 	// Your default Language (see supported ones by files: lang-<CountryCode>.php)
