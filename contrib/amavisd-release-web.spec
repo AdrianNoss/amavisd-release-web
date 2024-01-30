@@ -16,7 +16,7 @@
 Name:      amavisd-release-web
 BuildArch: noarch
 Version:   1.0.1
-Release:   2
+Release:   3
 Summary:   Web interface to release e-mails from Amavis quarantine
 License:   MIT
 URL:       https://github.com/AdrianNoss/amavisd-release-web
@@ -218,9 +218,9 @@ Apply local configurations to %{wwwdir}/%{name}/include/config.php
 - $language
 - $site_title
 - CAPTCHA service configuration
-END
 
 Adjust local 'amavis' configuration related to included notification templates
+END
 
 
 %post selinux
@@ -294,6 +294,9 @@ fi
 
 
 %changelog
+* Tue Jan 30 2024 Peter Bieringer <pb@bieringer.de> - 1.0.1-3
+- Fix post message
+
 * Mon Jan 01 2024 Peter Bieringer <pb@bieringer.de> - 1.0.1-2
 - Add notification templates
 - Add subpackage "notify"
