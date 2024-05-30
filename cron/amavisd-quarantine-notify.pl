@@ -1,6 +1,6 @@
-#!/bin/perl -W
+#!/usr/bin/perl -W
 #
-# (P) & (C) 2019-2020 by Peter Bieringer <pb@bieringer.de>
+# (P) & (C) 2019-2024 by Peter Bieringer <pb@bieringer.de>
 #
 # This program supports "amavisd-release-web" by sending on regular basis (cron)
 # notification e-mails to recipients, when entries in quarantine were found
@@ -25,6 +25,10 @@
 # 20200129/PB: add X-Spam-Level: ***** (5)
 # 20201113/PB: replace X-Spam-Level: ******* (7)
 # 20201117/PB: display original X-Spam-Level in message
+# 20220924/PB: add option -L/-U for Spam-Score limits
+# 20221011/PB: add recipient on release URL for "banned"
+# 20240107/PB: fix for catching only "spam" on limit checks
+# 20240530/PB: add support for multiple recipients in X-Envelope-To
 
 use strict;
 use warnings;
@@ -64,7 +68,7 @@ $opts{'R'} = "/etc/amavisd/amavisd-release-web-recipients";
 
 
 # option handling
-getopts("R:F:H:u:n:Q:r:cstdh?", \%opts);
+getopts("R:F:H:U:L:u:n:Q:r:ctdh?", \%opts);
 
 if (defined $opts{'h'} || defined $opts{'?'}) {
         print qq|$progname - (P) & (C) 2019 by Peter Bieringer <pb\@bieringer.de>
@@ -78,6 +82,8 @@ Options:
 	-Q <quarantine>	amavis quarantine directory (default: $opts{'Q'})
 	-R <recipfile>	file to list of recipients (default: $opts{'R'})
 	-F <fromaddr>	sender of e-mail (default: $opts{'F'})
+	-U <upperscore>	upper limit of score (excluded)
+	-L <lowerscore>	lower limit of score (included)
 	-n <hostname>	hostname for URL (default: $opts{'n'})
 	-u <URI>	URI to amavisd-release-web (default: $opts{'u'})
 	-r <recipient>	filter only given recipient (mosty for test/debug purposes) / ignores -R
@@ -97,9 +103,17 @@ Example for content of recipient file (-R $opts{'R'})
   !\@dont-care-about-rejected-spams.domain.example
 
 This program should be regulary triggered by cron, example for crontab file /etc/cron.d/amavis:
+
+Simple example, using defaults (-H $opts{'H'})
 |;
 
-	printf "%d */%d * * * amavis %s\n", rand(60), $opts{'H'} - 1, $progname_full;
+	printf "%d */%d * * * amavis %s -H %s\n", rand(60), $opts{'H'} - 1, $progname_full, $opts{'H'};
+
+        print qq|
+2-staged example, using Spam-Score limits to reduce frequency (< 20: every 4 hours, >= 20: every day)
+|;
+	printf "%d */4 * * * amavis %s -H 5  -U 20\n", rand(60), $progname_full;
+	printf "%d %d   * * * amavis %s -H 25 -L 20\n", rand(60), rand(24), $progname_full;
 	exit 0;
 };
 
@@ -108,6 +122,9 @@ my $QUARANTINE = $opts{'Q'};
 my $URL_BASE = "https://" . $opts{'n'} . $opts{'u'} . "/?ID=";
 my $FROM = $opts{'F'};
 my $RECIPFILE = $opts{'R'};
+
+my $SCORE_UPPER = $opts{'U'} || undef;
+my $SCORE_LOWER = $opts{'L'} || undef;
 
 if (defined $opts{'r'}) {
 	undef $RECIPFILE; # ignore file
@@ -175,14 +192,20 @@ while (readdir $dh) {
 			my $key = $1;
 			my $value = $2;
 			if ($key =~ /^(X-Envelope-To|X-Envelope-From)$/o) {
-				$value =~ s/^<//og;
-				$value =~ s/>$//og;
+				$value =~ s/<//og;
+				$value =~ s/>//og;
+				$value =~ s/,//og;
 			} elsif ($key eq "X-Spam-Score" && $type eq "virus") {
 				$value .= "  ***** VIRUS FOUND *****";
 			};
 			$quarantine{$entry}->{$key} = decode("MIME-Header", $value);
 			$quarantine{$entry}->{$key} =~ s/[^\x00-\x7f]//og;
-			$recipients{$value}++ if ($key eq "X-Envelope-To");
+			$quarantine{$entry}->{'type'} = $type;
+			if ($key eq "X-Envelope-To") {
+				foreach my $recipient (split(" ", $value)) {
+					$recipients{$recipient}++;
+				};
+			};
 		};
 	};
 	close $fh;
@@ -247,8 +270,16 @@ foreach my $recipient (sort keys %recipients) {
 	foreach my $entry (sort { $quarantine{$b}->{'mtime'} <=> $quarantine{$a}->{'mtime'} } keys %quarantine) {
 		# print Dumper($quarantine{$entry});
 		#
-		# check recipient
-		next if $quarantine{$entry}->{'X-Envelope-To'} ne $recipient;
+		# check recipient (against list of recipients in X-Envelope-To)
+		next unless grep { /^$recipient$/ } split(" ", $quarantine{$entry}->{'X-Envelope-To'});
+
+		if (defined $opts{'L'} || defined $opts{'U'}) {
+			if (defined $quarantine{$entry}->{'X-Spam-Score'} && $quarantine{$entry}->{'type'} eq "spam") {
+				# check for spam score limits
+				next if (defined $opts{'L'} && $quarantine{$entry}->{'X-Spam-Score'} <  $opts{'L'});
+				next if (defined $opts{'U'} && $quarantine{$entry}->{'X-Spam-Score'} >= $opts{'U'});
+			};
+		};
 
 		my $ctx = Digest::MD5->new;
 		my %spam;
@@ -293,7 +324,11 @@ foreach my $recipient (sort keys %recipients) {
 		for my $mtime (sort { $b <=> $a } keys %{$spam_list{$digest}->{'entry'}}) {
 			# only print last entry
 			push @output, strftime "Received     : %Y-%m-%d %H:%M:%S %Z", localtime($mtime);
-			push @output, sprintf "%-13s: %s", "Release-URL", $URL_BASE . $spam_list{$digest}->{'entry'}->{$mtime};
+			my $token = $spam_list{$digest}->{'entry'}->{$mtime};
+			if ($spam_list{$digest}->{'entry'}->{$mtime} =~ /^banned-/o) {
+				$token .= "&R=" . $recipient;
+			};
+			push @output, sprintf "%-13s: %s", "Release-URL", $URL_BASE . $token;
 			$spam_list{$digest}->{'entry'}->{$mtime} =~ /^([^-]+)-.*$/o;
 			$statistics{$1}++;
 			last;
@@ -316,6 +351,8 @@ foreach my $recipient (sort keys %recipients) {
 		$info .= $stat . "=" . $statistics{$stat};
 	};
 	push @topic, " Range: last " . $HOURS . " hours, found: " . $info;
+	push @topic, " Spam-Score limit: >= " . $opts{'L'} if (defined $opts{'L'});
+	push @topic, " Spam-Score limit: <  " . $opts{'U'} if (defined $opts{'U'});
 	push @topic, " Recipient: " . $recipient;
 	push @topic, "-" x 75;
 	
