@@ -15,8 +15,8 @@
 
 Name:      amavisd-release-web
 BuildArch: noarch
-Version:   1.0.1
-Release:   3
+Version:   1.0.2
+Release:   1
 Summary:   Web interface to release e-mails from Amavis quarantine
 License:   MIT
 URL:       https://github.com/AdrianNoss/amavisd-release-web
@@ -294,6 +294,9 @@ fi
 
 
 %changelog
+* Thu May 30 2024 Peter Bieringer <pb@bieringer.de> - 1.0.2-1
+- Release 1.0.2
+
 * Tue Jan 30 2024 Peter Bieringer <pb@bieringer.de> - 1.0.1-3
 - Fix post message
 
