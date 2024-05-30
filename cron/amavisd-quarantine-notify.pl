@@ -1,4 +1,4 @@
-#!/bin/perl -W
+#!/usr/bin/perl -W
 #
 # (P) & (C) 2019-2024 by Peter Bieringer <pb@bieringer.de>
 #
@@ -28,6 +28,7 @@
 # 20220924/PB: add option -L/-U for Spam-Score limits
 # 20221011/PB: add recipient on release URL for "banned"
 # 20240107/PB: fix for catching only "spam" on limit checks
+# 20240530/PB: add support for multiple recipients in X-Envelope-To
 
 use strict;
 use warnings;
@@ -191,15 +192,20 @@ while (readdir $dh) {
 			my $key = $1;
 			my $value = $2;
 			if ($key =~ /^(X-Envelope-To|X-Envelope-From)$/o) {
-				$value =~ s/^<//og;
-				$value =~ s/>$//og;
+				$value =~ s/<//og;
+				$value =~ s/>//og;
+				$value =~ s/,//og;
 			} elsif ($key eq "X-Spam-Score" && $type eq "virus") {
 				$value .= "  ***** VIRUS FOUND *****";
 			};
 			$quarantine{$entry}->{$key} = decode("MIME-Header", $value);
 			$quarantine{$entry}->{$key} =~ s/[^\x00-\x7f]//og;
 			$quarantine{$entry}->{'type'} = $type;
-			$recipients{$value}++ if ($key eq "X-Envelope-To");
+			if ($key eq "X-Envelope-To") {
+				foreach my $recipient (split(" ", $value)) {
+					$recipients{$recipient}++;
+				};
+			};
 		};
 	};
 	close $fh;
@@ -264,8 +270,8 @@ foreach my $recipient (sort keys %recipients) {
 	foreach my $entry (sort { $quarantine{$b}->{'mtime'} <=> $quarantine{$a}->{'mtime'} } keys %quarantine) {
 		# print Dumper($quarantine{$entry});
 		#
-		# check recipient
-		next if $quarantine{$entry}->{'X-Envelope-To'} ne $recipient;
+		# check recipient (against list of recipients in X-Envelope-To)
+		next unless grep { /^$recipient$/ } split(" ", $quarantine{$entry}->{'X-Envelope-To'});
 
 		if (defined $opts{'L'} || defined $opts{'U'}) {
 			if (defined $quarantine{$entry}->{'X-Spam-Score'} && $quarantine{$entry}->{'type'} eq "spam") {
